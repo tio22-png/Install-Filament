@@ -15,8 +15,8 @@ class CategoriesTable
         return $table
             ->columns([
                 //
-                TextColumn::make('name'),
-                TextColumn::make('slug'),
+                TextColumn::make('name')->sortable(),
+                TextColumn::make('slug')->sortable(),
             ])
             ->filters([
                 //

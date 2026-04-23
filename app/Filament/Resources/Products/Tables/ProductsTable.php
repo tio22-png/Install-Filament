@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Products\Tables;
 
+use Dom\Text;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -17,25 +18,33 @@ class ProductsTable
     {
         return $table
             ->columns([
-                TextColumn::make('name'),
-                TextColumn::make('sku'),
+                TextColumn::make('name')->sortable(),
+                TextColumn::make('sku')->sortable(),
 
                 TextColumn::make('price')
-                    ->label('Price'),
+                    ->label('Price')
+                    ->sortable(),
 
-                TextColumn::make('stock'),
+                TextColumn::make('stock')->sortable(),
 
                 ImageColumn::make('image')
                     ->disk('public'),
+
+                TextColumn::make('created_at')
+                    ->label('Date')
+                    ->dateTime()
+                    ->sortable(),
 
                 // ✅ Tambahan: status aktif (badge/icon)
                 IconColumn::make('is_active')
                     ->label('Status')
                     ->boolean(),
+
             ])
             ->filters([
                 //
             ])
+            ->defaultSort('created_at', 'desc')
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
