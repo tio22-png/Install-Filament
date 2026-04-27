@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Posts\Schemas;
 
 use Filament\Schemas\Schema;
+use App\Models\Category;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\ColorPicker;
@@ -44,11 +45,12 @@ class PostForm
 
                             Select::make('category_id')
                                 ->relationship('category', 'name')
+                                ->options(Category::all()->pluck('name', 'id'))
                                 ->required()
                                 ->validationMessages([
                                     'required' => 'Category wajib dipilih',
                                 ])
-                                ->preload()
+                                // ->preload()
                                 ->searchable(),
 
                             ColorPicker::make('color'),
@@ -69,7 +71,11 @@ class PostForm
 
                             DateTimePicker::make('published_at'),
 
-                            TagsInput::make('tags'),
+                            Select::make('tags')
+                                ->relationship('tags', 'name')
+                                ->multiple()
+                                ->preload()
+                                ->searchable(),
                         ]),
 
                     Section::make('Thumbnail')

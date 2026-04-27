@@ -4,7 +4,10 @@ namespace App\Filament\Resources\Posts\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ReplicateAction;
+use Filament\Actions\Action;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ColorColumn;
@@ -59,7 +62,18 @@ class PostsTable
                     ->label('Category'),
             ])
             ->recordActions([
-                EditAction::make(),
+                EditAction::make()
+                    ->icon('heroicon-o-pencil'),
+                ReplicateAction::make()
+                    ->icon('heroicon-o-document-duplicate'),
+                DeleteAction::make()
+                    ->icon('heroicon-o-trash'),
+                Action::make('togglePublish')
+                    ->label(fn ($record) => $record->published ? 'Unpublish' : 'Publish')
+                    ->icon(fn ($record) => $record->published ? 'heroicon-o-x-circle' : 'heroicon-o-check-circle')
+                    ->color(fn ($record) => $record->published ? 'warning' : 'success')
+                    ->action(fn ($record) => $record->update(['published' => ! $record->published]))
+                    ->requiresConfirmation(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
